@@ -95,6 +95,9 @@
                 <button class="btn waves-effect waves-light red lighten-2" onclick="confirmTasks()">Compare Tasks</button>
             </div>
             <ul class="collection" id="task-list"></ul>
+            <div class="centered">
+                <button class="btn waves-effect waves-light blue lighten-2" onclick="shareTasks()">Share Tasks</button>
+            </div>
         </div>
         <div id="step-2" class="hidden">
             <h5 class="centered">Compare Tasks</h5>
@@ -116,6 +119,9 @@
                     </div>
                 </div>
             </div>
+            <div class="centered">
+                <button class="btn waves-effect waves-light blue lighten-2" onclick="shareTasks()">Share Tasks</button>
+            </div>
         </div>
     </div>
 
@@ -126,6 +132,36 @@
         let comparisonIndex = 0;
         let taskColors = [];
         let completedTasks = new Set();
+
+        // Load data from URL parameters
+        function loadFromURL() {
+            const params = new URLSearchParams(window.location.search);
+            if (params.has('tasks') && params.has('colors') && params.has('completed')) {
+                tasks = JSON.parse(decodeURIComponent(params.get('tasks')));
+                taskColors = JSON.parse(decodeURIComponent(params.get('colors')));
+                completedTasks = new Set(JSON.parse(decodeURIComponent(params.get('completed'))));
+                if (params.has('comparisons')) {
+                    comparisons = JSON.parse(decodeURIComponent(params.get('comparisons')));
+                }
+                updateTaskList();
+                if (tasks.length > 1 && comparisons.length > 0) {
+                    calculatePrioritization();
+                    document.getElementById('step-1').classList.add('hidden');
+                    document.getElementById('step-3').classList.remove('hidden');
+                }
+            }
+        }
+
+        // Encode data into URL parameters
+        function updateURL() {
+            const params = new URLSearchParams({
+                tasks: encodeURIComponent(JSON.stringify(tasks)),
+                colors: encodeURIComponent(JSON.stringify(taskColors)),
+                completed: encodeURIComponent(JSON.stringify([...completedTasks])),
+                comparisons: encodeURIComponent(JSON.stringify(comparisons))
+            });
+            history.replaceState(null, '', '?' + params.toString());
+        }
 
         function handleKeyPress(event) {
             if (event.key === 'Enter') {
@@ -141,6 +177,7 @@
                 taskColors.push(generateColor(tasks.length - 1));
                 taskInput.value = '';
                 updateTaskList();
+                updateURL();
             }
         }
 
@@ -216,8 +253,13 @@
 
         function chooseTask(choice) {
             const comp = comparisons[comparisonIndex];
-            comp.winner = (choice === 'left') ? comp.left : comp.right;
+            if (choice === 'left') {
+                comp.winner = comp.left;
+            } else {
+                comp.winner = comp.right;
+            }
             comparisonIndex++;
+            updateURL();
             showComparison();
         }
 
@@ -251,6 +293,7 @@
                 `;
                 orderedList.appendChild(li);
             });
+            updateURL(); // Update URL after displaying results
         }
 
         function toggleCompletion(task) {
@@ -267,6 +310,7 @@
             taskColors.splice(index, 1);
             completedTasks = new Set([...completedTasks].filter(task => tasks.includes(task)));
             updateTaskList();
+            updateURL(); // Update URL after removing a task
         }
 
         function removeResult(index) {
@@ -281,6 +325,7 @@
                     completedTasks = new Set([...completedTasks].filter(task => tasks.includes(task)));
                     updateTaskList();
                     displayResults(calculateOrderedTasks());
+                    updateURL(); // Update URL after removing a result
                 }
             }
         }
@@ -295,6 +340,24 @@
             return tasks.map((task, index) => ({ task, score: scores[index], color: taskColors[index] }))
                 .sort((a, b) => b.score - a.score);
         }
+
+        function shareTasks() {
+            const shareUrl = window.location.href;
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Task Prioritization',
+                    text: 'Check out these tasks:',
+                    url: shareUrl
+                }).catch(error => console.error('Error sharing:', error));
+            } else if (navigator.clipboard) {
+                navigator.clipboard.writeText(shareUrl).then(() => {
+                    alert('URL copied to clipboard!');
+                }).catch(error => console.error('Error copying URL:', error));
+            }
+        }
+
+        // Initialize the app
+        window.onload = loadFromURL;
     </script>
 </body>
 </html>
