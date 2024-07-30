@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task Prioritization</title>
+    <title>Priorit👀</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
     <style>
         body {
@@ -84,52 +84,53 @@
 </head>
 <body>
     <div class="container">
-        <h4 class="centered">Task Prioritization</h4>
+        <h1 class="centered">Itemeaser 😌</h1>
+        <p class="centered" id="tagline">Struggling to decide between different options? Overwhelmed by all of the possibile outcomes? Don't worry. Itemeaser helps you. Just enter all of your options and Itemeaser will guide you through the process of ordering them.</p>
         <div id="step-1">
             <div class="input-field">
-                <input type="text" id="task-input" placeholder="Enter a task" onkeypress="handleKeyPress(event)">
-                <label for="task-input">Task</label>
+                <input type="text" id="task-input" placeholder="Enter an item to prioritize." onkeypress="handleKeyPress(event)">
+                <label for="task-input">Item</label>
             </div>
             <ul class="collection" id="task-list"></ul>
             <div class="action-buttons">
                 <button class="btn waves-effect waves-light grey darken-3" onclick="resetTasks()">Reset</button>
-                <button class="btn waves-effect waves-light blue lighten-2" onclick="shareTasks()">Share Tasks</button>
+                <button class="btn waves-effect waves-light blue lighten-2" onclick="shareTasks()">Share List</button>
                 
-                <button class="btn waves-effect waves-light" onclick="addTask3()">Add Task</button>
-                <button class="btn waves-effect waves-light red lighten-2" onclick="confirmTasks()">Compare Tasks</button>
+                <button class="btn waves-effect waves-light" onclick="addTask3()">Add Item</button>
+                <button class="btn waves-effect waves-light red lighten-2" onclick="confirmTasks()">Compare Items</button>
             </div>
         </div>
         <div id="step-2" class="hidden">
-            <h5 class="centered">Compare Tasks</h5>
-            <p class="centered">Which is more important?</p>
+            <h2 class="centered">Compare Items</h2>
+            <p class="centered">Pick an Item.</p>
             <div class="centered">
                 <button class="btn waves-effect waves-light" id="left-button" onclick="chooseTask('left')"></button>
                 <button class="btn waves-effect waves-light" id="right-button" onclick="chooseTask('right')"></button>
             </div>
         </div>
         <div id="step-3" class="hidden">
-            <h5 class="centered">Results</h5>
+            <h2 class="centered">Results</h2>
             <div class="row">
                 <div class="col s12">
                     <div class="card">
                         <div class="card-content">
-                            <span class="card-title">Ordered Tasks</span>
+                            <span class="card-title">Ordered Items</span>
                             <ul class="collection" id="ordered-tasks"></ul>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="input-field">
-                <input type="text" id="task-input-3" placeholder="Enter a task" onkeypress="handleKeyPress3(event)">
-                <label for="task-input-3">Task</label>
+                <input type="text" id="task-input-3" placeholder="Enter an item to prioritize." onkeypress="handleKeyPress3(event)">
+                <label for="task-input-3">Item</label>
             </div>
             <ul class="collection" id="task-list-3"></ul>
             <div class="action-buttons">
                 <button class="btn waves-effect waves-light grey darken-3" onclick="resetTasks()">Reset</button>
-                <button class="btn waves-effect waves-light blue lighten-2" onclick="shareTasks()">Share Tasks</button>
+                <button class="btn waves-effect waves-light blue lighten-2" onclick="shareTasks()">Share List</button>
                 
-                <button class="btn waves-effect waves-light" onclick="addTask3()">Add Task</button>
-                <button class="btn waves-effect waves-light red lighten-2" onclick="confirmTasks()">Compare Tasks</button>
+                <button class="btn waves-effect waves-light" onclick="addTask3()">Add Item</button>
+                <button class="btn waves-effect waves-light red lighten-2" onclick="confirmTasks()">Compare Items</button>
             </div>
         </div>
     </div>
@@ -157,6 +158,7 @@
                     calculatePrioritization();
                     document.getElementById('step-1').classList.add('hidden');
                     document.getElementById('step-3').classList.remove('hidden');
+                    document.getElementById('tagline').classList.add('hidden');
                 }
             }
         }
@@ -252,7 +254,9 @@
         function confirmTasks() {
             if (tasks.length > 1) {
                 document.getElementById('step-1').classList.add('hidden');
-                document.getElementById('step-3').classList.add('hidden');
+                document.getElementById('step-3').classList.add('hidden');                
+                document.getElementById('tagline').classList.add('hidden');
+
                 prepareComparisons();
                 document.getElementById('step-2').classList.remove('hidden');
             } else {
@@ -411,6 +415,7 @@
             updateTaskList();
             updateTaskList3();
             document.getElementById('step-1').classList.remove('hidden');
+            document.getElementById('tagline').classList.add('hidden');
             document.getElementById('step-2').classList.add('hidden');
             document.getElementById('step-3').classList.add('hidden');
             updateURL();
