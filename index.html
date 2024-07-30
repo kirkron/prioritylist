@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Task Prioritization</title>
-    <!-- Importing Materialize CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
     <style>
         body {
@@ -42,6 +41,18 @@
         .collection .collection-item {
             color: #ffffff;
             background-color: transparent;
+            position: relative;
+        }
+        .collection-item .btn-flat {
+            color: #ffffff;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 24px;
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
         }
         .btn, .btn:hover, .btn:focus {
             background-color: #ff5722;
@@ -66,12 +77,14 @@
             justify-content: space-between;
             align-items: center;
         }
+        .completed-task {
+            text-decoration: line-through;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h4 class="centered">Task Prioritization</h4>
-        <!-- Step 1: Add Tasks -->
         <div id="step-1">
             <div class="input-field">
                 <input type="text" id="task-input" placeholder="Enter a task" onkeypress="handleKeyPress(event)">
@@ -83,7 +96,6 @@
             </div>
             <ul class="collection" id="task-list"></ul>
         </div>
-        <!-- Step 2: Compare Tasks -->
         <div id="step-2" class="hidden">
             <h5 class="centered">Compare Tasks</h5>
             <p class="centered">Which is more important?</p>
@@ -92,7 +104,6 @@
                 <button class="btn waves-effect waves-light" id="right-button" onclick="chooseTask('right')"></button>
             </div>
         </div>
-        <!-- Step 3: Results -->
         <div id="step-3" class="hidden">
             <h5 class="centered">Results</h5>
             <div class="row">
@@ -108,13 +119,13 @@
         </div>
     </div>
 
-    <!-- Importing Materialize JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script>
         let tasks = [];
         let comparisons = [];
         let comparisonIndex = 0;
         let taskColors = [];
+        let completedTasks = new Set();
 
         function handleKeyPress(event) {
             if (event.key === 'Enter') {
@@ -138,9 +149,12 @@
             taskList.innerHTML = '';
             tasks.forEach((task, index) => {
                 const li = document.createElement('li');
-                li.textContent = task;
                 li.className = 'collection-item';
                 li.style.backgroundColor = taskColors[index];
+                li.innerHTML = `
+                    ${task}
+                    <button class="btn-flat" onclick="removeTask(${index})">&#128465;</button>
+                `;
                 taskList.appendChild(li);
             });
         }
@@ -210,7 +224,9 @@
         function calculatePrioritization() {
             const scores = new Array(tasks.length).fill(0);
             comparisons.forEach(comp => {
-                scores[comp.winner]++;
+                if (comp.winner !== undefined) {
+                    scores[comp.winner]++;
+                }
             });
             const orderedTasks = tasks.map((task, index) => ({ task, score: scores[index], color: taskColors[index] }))
                 .sort((a, b) => b.score - a.score);
@@ -224,12 +240,60 @@
             orderedTasks.forEach(({ task, score, color }, index) => {
                 const li = document.createElement('li');
                 li.className = 'collection-item list-item-wrapper';
+                const checkboxId = `checkbox-${index}`;
                 li.innerHTML = `
+                    <label>
+                        <input type="checkbox" id="${checkboxId}" ${completedTasks.has(task) ? 'checked' : ''} onclick="toggleCompletion('${task}')">
+                        <span class="${completedTasks.has(task) ? 'completed-task' : ''}">${task} (Score: ${score})</span>
+                    </label>
                     <div class="bar" style="width: ${(score / maxScore) * 100}%; background-color: ${color};"></div>
-                    ${task} (Score: ${score})
+                    <button class="btn-flat" onclick="removeResult(${index})">&#128465;</button>
                 `;
                 orderedList.appendChild(li);
             });
+        }
+
+        function toggleCompletion(task) {
+            if (completedTasks.has(task)) {
+                completedTasks.delete(task);
+            } else {
+                completedTasks.add(task);
+            }
+            displayResults(calculateOrderedTasks());
+        }
+
+        function removeTask(index) {
+            tasks.splice(index, 1);
+            taskColors.splice(index, 1);
+            completedTasks = new Set([...completedTasks].filter(task => tasks.includes(task)));
+            updateTaskList();
+        }
+
+        function removeResult(index) {
+            const orderedTasks = document.getElementById('ordered-tasks').children;
+            if (index >= 0 && index < orderedTasks.length) {
+                const task = orderedTasks[index];
+                const taskName = task.textContent.split(' (')[0].trim();
+                const taskIndex = tasks.indexOf(taskName);
+                if (taskIndex > -1) {
+                    tasks.splice(taskIndex, 1);
+                    taskColors.splice(taskIndex, 1);
+                    completedTasks = new Set([...completedTasks].filter(task => tasks.includes(task)));
+                    updateTaskList();
+                    displayResults(calculateOrderedTasks());
+                }
+            }
+        }
+
+        function calculateOrderedTasks() {
+            const scores = new Array(tasks.length).fill(0);
+            comparisons.forEach(comp => {
+                if (comp.winner !== undefined) {
+                    scores[comp.winner]++;
+                }
+            });
+            return tasks.map((task, index) => ({ task, score: scores[index], color: taskColors[index] }))
+                .sort((a, b) => b.score - a.score);
         }
     </script>
 </body>
