@@ -90,12 +90,13 @@
                 <input type="text" id="task-input" placeholder="Enter a task" onkeypress="handleKeyPress(event)">
                 <label for="task-input">Task</label>
             </div>
-            <div class="action-buttons">
+            <ul class="collection" id="task-list"></ul>
+            <div class="right">
                 <button class="btn waves-effect waves-light" onclick="addTask()">Add Task</button>
                 <button class="btn waves-effect waves-light red lighten-2" onclick="confirmTasks()">Compare Tasks</button>
             </div>
-            <ul class="collection" id="task-list"></ul>
-            <div class="centered">
+            <div class="left">
+                <button class="btn waves-effect waves-light grey darken-3" onclick="resetTasks()">Reset</button>
                 <button class="btn waves-effect waves-light blue lighten-2" onclick="shareTasks()">Share Tasks</button>
             </div>
         </div>
@@ -119,7 +120,17 @@
                     </div>
                 </div>
             </div>
-            <div class="centered">
+            <div class="input-field">
+                <input type="text" id="task-input-3" placeholder="Enter a task" onkeypress="handleKeyPress3(event)">
+                <label for="task-input-3">Task</label>
+            </div>
+            <ul class="collection" id="task-list-3"></ul>
+            <div class="right">
+                <button class="btn waves-effect waves-light" onclick="addTask3()">Add Task</button>
+                <button class="btn waves-effect waves-light red lighten-2" onclick="confirmTasks()">Compare Tasks</button>
+            </div>
+            <div class="left">
+                <button class="btn waves-effect waves-light grey darken-3" onclick="resetTasks()">Reset</button>
                 <button class="btn waves-effect waves-light blue lighten-2" onclick="shareTasks()">Share Tasks</button>
             </div>
         </div>
@@ -133,7 +144,6 @@
         let taskColors = [];
         let completedTasks = new Set();
 
-        // Load data from URL parameters
         function loadFromURL() {
             const params = new URLSearchParams(window.location.search);
             if (params.has('tasks') && params.has('colors') && params.has('completed')) {
@@ -144,6 +154,7 @@
                     comparisons = JSON.parse(decodeURIComponent(params.get('comparisons')));
                 }
                 updateTaskList();
+                updateTaskList3();
                 if (tasks.length > 1 && comparisons.length > 0) {
                     calculatePrioritization();
                     document.getElementById('step-1').classList.add('hidden');
@@ -152,7 +163,6 @@
             }
         }
 
-        // Encode data into URL parameters
         function updateURL() {
             const params = new URLSearchParams({
                 tasks: encodeURIComponent(JSON.stringify(tasks)),
@@ -169,6 +179,12 @@
             }
         }
 
+        function handleKeyPress3(event) {
+            if (event.key === 'Enter') {
+                addTask3();
+            }
+        }
+
         function addTask() {
             const taskInput = document.getElementById('task-input');
             const task = taskInput.value.trim();
@@ -177,6 +193,20 @@
                 taskColors.push(generateColor(tasks.length - 1));
                 taskInput.value = '';
                 updateTaskList();
+                updateTaskList3();
+                updateURL();
+            }
+        }
+
+        function addTask3() {
+            const taskInput = document.getElementById('task-input-3');
+            const task = taskInput.value.trim();
+            if (task) {
+                tasks.push(task);
+                taskColors.push(generateColor(tasks.length - 1));
+                taskInput.value = '';
+                updateTaskList();
+                updateTaskList3();
                 updateURL();
             }
         }
@@ -196,6 +226,21 @@
             });
         }
 
+        function updateTaskList3() {
+            const taskList3 = document.getElementById('task-list-3');
+            taskList3.innerHTML = '';
+            tasks.forEach((task, index) => {
+                const li = document.createElement('li');
+                li.className = 'collection-item';
+                li.style.backgroundColor = taskColors[index];
+                li.innerHTML = `
+                    ${task}
+                    <button class="btn-flat" onclick="removeTask(${index})">&#128465;</button>
+                `;
+                taskList3.appendChild(li);
+            });
+        }
+
         function generateColor(index) {
             const colors = [
                 '#ff8a80', '#ff5252', '#ff1744', '#d50000',
@@ -209,6 +254,7 @@
         function confirmTasks() {
             if (tasks.length > 1) {
                 document.getElementById('step-1').classList.add('hidden');
+                document.getElementById('step-3').classList.add('hidden');
                 prepareComparisons();
                 document.getElementById('step-2').classList.remove('hidden');
             } else {
@@ -310,6 +356,7 @@
             taskColors.splice(index, 1);
             completedTasks = new Set([...completedTasks].filter(task => tasks.includes(task)));
             updateTaskList();
+            updateTaskList3();
             updateURL(); // Update URL after removing a task
         }
 
@@ -324,6 +371,7 @@
                     taskColors.splice(taskIndex, 1);
                     completedTasks = new Set([...completedTasks].filter(task => tasks.includes(task)));
                     updateTaskList();
+                    updateTaskList3();
                     displayResults(calculateOrderedTasks());
                     updateURL(); // Update URL after removing a result
                 }
@@ -354,6 +402,20 @@
                     alert('URL copied to clipboard!');
                 }).catch(error => console.error('Error copying URL:', error));
             }
+        }
+
+        function resetTasks() {
+            tasks = [];
+            comparisons = [];
+            comparisonIndex = 0;
+            taskColors = [];
+            completedTasks = new Set();
+            updateTaskList();
+            updateTaskList3();
+            document.getElementById('step-1').classList.remove('hidden');
+            document.getElementById('step-2').classList.add('hidden');
+            document.getElementById('step-3').classList.add('hidden');
+            updateURL();
         }
 
         // Initialize the app
