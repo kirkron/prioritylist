@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Prioritization</title>
+    <!-- Importing Materialize CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #121212;
+            color: #ffffff;
+        }
+        .container {
+            max-width: 600px;
+            width: 100%;
+        }
+        .hidden {
+            display: none;
+        }
+        .centered {
+            text-align: center;
+        }
+        .input-field input[type=text] {
+            color: #ffffff;
+        }
+        .input-field input[type=text]:focus + label {
+            color: #ffffff;
+        }
+        .input-field .prefix.active {
+            color: #ffffff;
+        }
+        .input-field input[type=text]:focus {
+            border-bottom: 1px solid #ffffff;
+            box-shadow: 0 1px 0 0 #ffffff;
+        }
+        .collection .collection-item {
+            color: #ffffff;
+            background-color: transparent;
+        }
+        .btn, .btn:hover, .btn:focus {
+            background-color: #ff5722;
+        }
+        .card {
+            background-color: #333333;
+        }
+        .bar {
+            height: 10px;
+            width: 0;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            z-index: 0;
+        }
+        .list-item-wrapper {
+            position: relative;
+            padding: 10px;
+        }
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h4 class="centered">Task Prioritization</h4>
+        <!-- Step 1: Add Tasks -->
+        <div id="step-1">
+            <div class="input-field">
+                <input type="text" id="task-input" placeholder="Enter a task" onkeypress="handleKeyPress(event)">
+                <label for="task-input">Task</label>
+            </div>
+            <div class="action-buttons">
+                <button class="btn waves-effect waves-light" onclick="addTask()">Add Task</button>
+                <button class="btn waves-effect waves-light red lighten-2" onclick="confirmTasks()">Compare Tasks</button>
+            </div>
+            <ul class="collection" id="task-list"></ul>
+        </div>
+        <!-- Step 2: Compare Tasks -->
+        <div id="step-2" class="hidden">
+            <h5 class="centered">Compare Tasks</h5>
+            <p class="centered">Which is more important?</p>
+            <div class="centered">
+                <button class="btn waves-effect waves-light" id="left-button" onclick="chooseTask('left')"></button>
+                <button class="btn waves-effect waves-light" id="right-button" onclick="chooseTask('right')"></button>
+            </div>
+        </div>
+        <!-- Step 3: Results -->
+        <div id="step-3" class="hidden">
+            <h5 class="centered">Results</h5>
+            <div class="row">
+                <div class="col s12">
+                    <div class="card">
+                        <div class="card-content">
+                            <span class="card-title">Ordered Tasks</span>
+                            <ul class="collection" id="ordered-tasks"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Importing Materialize JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+        let tasks = [];
+        let comparisons = [];
+        let comparisonIndex = 0;
+        let taskColors = [];
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                addTask();
+            }
+        }
+
+        function addTask() {
+            const taskInput = document.getElementById('task-input');
+            const task = taskInput.value.trim();
+            if (task) {
+                tasks.push(task);
+                taskColors.push(generateColor(tasks.length - 1));
+                taskInput.value = '';
+                updateTaskList();
+            }
+        }
+
+        function updateTaskList() {
+            const taskList = document.getElementById('task-list');
+            taskList.innerHTML = '';
+            tasks.forEach((task, index) => {
+                const li = document.createElement('li');
+                li.textContent = task;
+                li.className = 'collection-item';
+                li.style.backgroundColor = taskColors[index];
+                taskList.appendChild(li);
+            });
+        }
+
+        function generateColor(index) {
+            const colors = [
+                '#ff8a80', '#ff5252', '#ff1744', '#d50000',
+                '#ff80ab', '#ff4081', '#f50057', '#c51162',
+                '#ea80fc', '#e040fb', '#d500f9', '#aa00ff',
+                '#b388ff', '#7c4dff', '#651fff', '#6200ea'
+            ];
+            return colors[index % colors.length];
+        }
+
+        function confirmTasks() {
+            if (tasks.length > 1) {
+                document.getElementById('step-1').classList.add('hidden');
+                prepareComparisons();
+                document.getElementById('step-2').classList.remove('hidden');
+            } else {
+                alert('Please add at least two tasks.');
+            }
+        }
+
+        function prepareComparisons() {
+            comparisons = [];
+            for (let i = 0; i < tasks.length; i++) {
+                for (let j = i + 1; j < tasks.length; j++) {
+                    comparisons.push({ left: i, right: j });
+                }
+            }
+            shuffleArray(comparisons);
+            comparisonIndex = 0;
+            showComparison();
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function showComparison() {
+            if (comparisonIndex < comparisons.length) {
+                const comp = comparisons[comparisonIndex];
+                const leftButton = document.getElementById('left-button');
+                const rightButton = document.getElementById('right-button');
+                leftButton.textContent = tasks[comp.left];
+                rightButton.textContent = tasks[comp.right];
+                leftButton.style.backgroundColor = taskColors[comp.left];
+                rightButton.style.backgroundColor = taskColors[comp.right];
+            } else {
+                document.getElementById('step-2').classList.add('hidden');
+                calculatePrioritization();
+                document.getElementById('step-3').classList.remove('hidden');
+            }
+        }
+
+        function chooseTask(choice) {
+            const comp = comparisons[comparisonIndex];
+            comp.winner = (choice === 'left') ? comp.left : comp.right;
+            comparisonIndex++;
+            showComparison();
+        }
+
+        function calculatePrioritization() {
+            const scores = new Array(tasks.length).fill(0);
+            comparisons.forEach(comp => {
+                scores[comp.winner]++;
+            });
+            const orderedTasks = tasks.map((task, index) => ({ task, score: scores[index], color: taskColors[index] }))
+                .sort((a, b) => b.score - a.score);
+            displayResults(orderedTasks);
+        }
+
+        function displayResults(orderedTasks) {
+            const orderedList = document.getElementById('ordered-tasks');
+            orderedList.innerHTML = '';
+            const maxScore = Math.max(...orderedTasks.map(task => task.score));
+            orderedTasks.forEach(({ task, score, color }, index) => {
+                const li = document.createElement('li');
+                li.className = 'collection-item list-item-wrapper';
+                li.innerHTML = `
+                    <div class="bar" style="width: ${(score / maxScore) * 100}%; background-color: ${color};"></div>
+                    ${task} (Score: ${score})
+                `;
+                orderedList.appendChild(li);
+            });
+        }
+    </script>
+</body>
+</html>
