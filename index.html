@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Itemeaser 😌</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="favicon.png">
     <style>
         body {
             display: flex;
@@ -84,7 +86,7 @@
 </head>
 <body>
     <div class="container">
-        <h1 class="centered">Itemeaser 😌</h1>
+        <h1 class="centered">Itemeaser <img style="height: 1em; position: relative; bottom: -0.1em" src="icon512.png"/></h1>
         <p class="centered" id="tagline">Struggling to decide between different options? Overwhelmed by all of the possible outcomes? Don't worry. Itemeaser helps you. Just enter all of your options and Itemeaser will guide you through the process of ordering them.</p>
         <div id="step-1">
             <div class="input-field">
@@ -160,6 +162,9 @@
                     document.getElementById('step-3').classList.remove('hidden');
                     document.getElementById('tagline').classList.add('hidden');
                 }
+            } else if (localStorage.getItem('params')) {
+                history.replaceState(null, '', '?' + localStorage.getItem('params'));
+                window.location.reload();
             }
         }
 
@@ -170,6 +175,7 @@
                 completed: encodeURIComponent(JSON.stringify([...completedTasks])),
                 comparisons: encodeURIComponent(JSON.stringify(comparisons))
             });
+            localStorage.setItem('params', params.toString());
             history.replaceState(null, '', '?' + params.toString());
         }
 
@@ -423,6 +429,18 @@
 
         // Initialize the app
         window.onload = loadFromURL;
+    </script>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('service-worker.js').then(function(registration) {
+                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                }, function(err) {
+                    console.log('ServiceWorker registration failed: ', err);
+                });
+            });
+        }
     </script>
 </body>
 </html>
