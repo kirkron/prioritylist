@@ -5,17 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Itemeaser 😌</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/png" href="favicon.png">
     <style>
         body {
             display: flex;
             justify-content: center;
-            align-items: center;
             height: 100vh;
             margin: 0;
             background-color: #121212;
             color: #ffffff;
+            font-family: 'Poppins', sans-serif;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 300;
         }
         .container {
             max-width: 600px;
@@ -29,6 +33,7 @@
         }
         .input-field input[type=text] {
             color: #ffffff;
+            font-family: inherit;
         }
         .input-field input[type=text]:focus + label {
             color: #ffffff;
@@ -39,6 +44,9 @@
         .input-field input[type=text]:focus {
             border-bottom: 1px solid #ffffff;
             box-shadow: 0 1px 0 0 #ffffff;
+        }
+        .collection {
+            border-radius: 8px;
         }
         .collection .collection-item {
             color: #ffffff;
@@ -58,9 +66,15 @@
         }
         .btn, .btn:hover, .btn:focus {
             background-color: #ff5722;
+            font-family: inherit;
+            border-radius: 8px;
         }
         .card {
             background-color: #333333;
+            border-radius: 8px;
+        }
+        h2.card-title {
+            margin-top: 8px;
         }
         .bar {
             height: 10px;
@@ -86,7 +100,7 @@
 </head>
 <body>
     <div class="container">
-        <h1 class="centered">Itemeaser <img style="height: 1em; position: relative; bottom: -0.1em" src="icon512.png"/></h1>
+        <h1 class="centered">Itemeaser <img style="height: 1em; position: relative; bottom: -0.16em" src="icon512.png"/></h1>
         <p class="centered" id="tagline">Struggling to decide between different options? Overwhelmed by all of the possible outcomes? Don't worry. Itemeaser helps you. Just enter all of your options and Itemeaser will guide you through the process of ordering them.</p>
         <div id="step-1">
             <div class="input-field">
@@ -98,7 +112,7 @@
                 <button class="btn waves-effect waves-light grey darken-3" onclick="resetTasks()">Reset</button>
                 <button class="btn waves-effect waves-light blue lighten-2" onclick="shareTasks()">Share List</button>
                 
-                <button class="btn waves-effect waves-light" onclick="addTask3()">Add Item</button>
+                <button class="btn waves-effect waves-light" onclick="addTask()">Add Item</button>
                 <button class="btn waves-effect waves-light red lighten-2" onclick="confirmTasks()">Compare Items</button>
             </div>
         </div>
@@ -111,12 +125,11 @@
             </div>
         </div>
         <div id="step-3" class="hidden">
-            <h2 class="centered">Results</h2>
             <div class="row">
                 <div class="col s12">
                     <div class="card">
                         <div class="card-content">
-                            <span class="card-title">Ordered Items</span>
+                            <h2 class="card-title">Ordered Items</h2>
                             <ul class="collection" id="ordered-tasks"></ul>
                         </div>
                     </div>
@@ -138,6 +151,8 @@
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.4.4/lz-string.min.js"></script>
+
     <script>
         let tasks = [];
         let comparisons = [];
@@ -147,36 +162,46 @@
 
         function loadFromURL() {
             const params = new URLSearchParams(window.location.search);
-            if (params.has('tasks') && params.has('colors') && params.has('completed')) {
-                tasks = JSON.parse(decodeURIComponent(params.get('tasks')));
-                taskColors = JSON.parse(decodeURIComponent(params.get('colors')));
-                completedTasks = new Set(JSON.parse(decodeURIComponent(params.get('completed'))));
-                if (params.has('comparisons')) {
-                    comparisons = JSON.parse(decodeURIComponent(params.get('comparisons')));
-                }
-                updateTaskList();
-                updateTaskList3();
-                if (tasks.length > 1 && comparisons.length > 0) {
-                    calculatePrioritization();
-                    document.getElementById('step-1').classList.add('hidden');
-                    document.getElementById('step-3').classList.remove('hidden');
-                    document.getElementById('tagline').classList.add('hidden');
+            if (params.has('data')) {
+                try {
+                    const encodedParams = params.get('data');
+                    const decompressedParams = LZString.decompressFromEncodedURIComponent(encodedParams);
+                    const parsedParams = JSON.parse(decompressedParams);
+                    
+                    tasks = parsedParams.tasks;
+                    taskColors = parsedParams.colors;
+                    completedTasks = new Set(parsedParams.completed);
+                    comparisons = parsedParams.comparisons;
+
+                    updateTaskList();
+                    updateTaskList3();
+                    if (tasks.length > 1 && comparisons.length > 0) {
+                        calculatePrioritization();
+                        document.getElementById('step-1').classList.add('hidden');
+                        document.getElementById('step-3').classList.remove('hidden');
+                        document.getElementById('tagline').classList.add('hidden');
+                    }
+                } catch (e) {
+                    console.error('Failed to parse URL parameters:', e);
                 }
             } else if (localStorage.getItem('params')) {
-                history.replaceState(null, '', '?' + localStorage.getItem('params'));
+                history.replaceState(null, '', `?data=${localStorage.getItem('params')}`);
                 window.location.reload();
             }
         }
 
+
         function updateURL() {
-            const params = new URLSearchParams({
-                tasks: encodeURIComponent(JSON.stringify(tasks)),
-                colors: encodeURIComponent(JSON.stringify(taskColors)),
-                completed: encodeURIComponent(JSON.stringify([...completedTasks])),
-                comparisons: encodeURIComponent(JSON.stringify(comparisons))
-            });
-            localStorage.setItem('params', params.toString());
-            history.replaceState(null, '', '?' + params.toString());
+            const params = {
+                tasks: tasks,
+                colors: taskColors,
+                completed: [...completedTasks],
+                comparisons: comparisons
+            };
+            const paramsString = JSON.stringify(params);
+            const compressedParams = LZString.compressToEncodedURIComponent(paramsString);
+            localStorage.setItem('params', compressedParams);
+            history.replaceState(null, '', `?data=${compressedParams}`);
         }
 
         function handleKeyPress(event) {
@@ -421,7 +446,7 @@
             updateTaskList();
             updateTaskList3();
             document.getElementById('step-1').classList.remove('hidden');
-            document.getElementById('tagline').classList.add('hidden');
+            document.getElementById('tagline').classList.remove('hidden');
             document.getElementById('step-2').classList.add('hidden');
             document.getElementById('step-3').classList.add('hidden');
             updateURL();
