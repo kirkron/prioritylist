@@ -22,7 +22,7 @@
             font-weight: 300;
         }
         #step-1, #step-2, #step-3 {
-            margin: 10px;
+            margin:
         }
         .container {
             max-width: 600px;
@@ -137,6 +137,7 @@
                         <div class="card-content">
                             <h2 class="card-title">Ordered Items</h2>
                             <ul class="collection" id="ordered-tasks"></ul>
+                            <button class="btn waves-effect waves-light green lighten-2" onclick="addToCalendar()">Add to Calendar</button>
                         </div>
                     </div>
                 </div>
@@ -441,6 +442,34 @@
                     alert('URL copied to clipboard!');
                 }).catch(error => console.error('Error copying URL:', error));
             }
+        }
+
+        function addToCalendar() {
+            const orderedTasks = calculateOrderedTasks();
+            const now = new Date();
+            const nextHour = new Date(now.setHours(now.getHours() + 1, 0, 0, 0));
+            
+            let icalContent = `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Itemeaser//EN\nCALSCALE:GREGORIAN\n`;
+
+            orderedTasks.forEach((task, index) => {
+                const start = new Date(nextHour.getTime() + index * 60 * 60 * 1000);
+                const end = new Date(start.getTime() + 60 * 60 * 1000);
+                
+                const startString = start.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+                const endString = end.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+                
+                icalContent += `BEGIN:VEVENT\nSUMMARY:${task.task}\nDTSTART:${startString}Z\nDTEND:${endString}Z\nEND:VEVENT\n`;
+            });
+
+            icalContent += `END:VCALENDAR`;
+
+            const blob = new Blob([icalContent], { type: 'text/calendar' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'tasks.ics';
+            a.click();
+            URL.revokeObjectURL(url);
         }
 
         function resetTasks() {
