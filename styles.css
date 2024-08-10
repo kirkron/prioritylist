@@ -1,0 +1,130 @@
+@font-face {
+    font-family: 'Poppins';
+    font-weight: 300;
+    src: url('fonts/poppins/Poppins-Light.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Poppins';
+    font-weight: 400;
+    src: url('fonts/poppins/Poppins-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Poppins';
+    font-weight: 500;
+    src: url('fonts/poppins/Poppins-Medium.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Poppins';
+    font-weight: 700;
+    src: url('fonts/poppins/Poppins-Bold.ttf') format('truetype');
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #121212;
+    color: #ffffff;
+    font-family: 'Poppins', sans-serif;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 300;
+}
+#step-1, #step-2, #step-3 {
+    margin: 10px;
+}
+.container {
+    max-width: 600px;
+    width: 100%;
+}
+#tagline {
+    margin: 3em;
+}
+.hidden {
+    display: none;
+}
+.centered {
+    text-align: center;
+}
+.input-field input[type=text] {
+    color: #ffffff;
+    font-family: inherit;
+}
+.input-field input[type=text]:focus + label {
+    color: #ffffff;
+}
+.input-field .prefix.active {
+    color: #ffffff;
+}
+.input-field input[type=text]:focus {
+    border-bottom: 1px solid #ffffff;
+    box-shadow: 0 1px 0 0 #ffffff;
+}
+.collection {
+    border-radius: 8px;
+}
+.collection .collection-item {
+    color: #ffffff;
+    background-color: transparent;
+    position: relative;
+}
+.collection-item .btn-flat {
+    color: #ffffff;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 24px;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.btn, .btn:hover, .btn:focus {
+    background-color: #ff5722;
+    font-family: inherit;
+    border-radius: 8px;
+}
+.card {
+    background-color: #333333;
+    border-radius: 8px;
+}
+h2.card-title {
+    margin-top: 8px;
+}
+.bar {
+    height: 10px;
+    width: 0;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: 0;
+}
+.list-item-wrapper {
+    position: relative;
+    padding: 10px;
+}
+.action-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.completed-task {
+    text-decoration: line-through;
+}
+
+footer {
+    border-top: 1px solid #ffffff;
+    margin-top: 50px;
+    padding-top: 10px;
+    padding-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+footer a {
+    color: #ffffff;
+}

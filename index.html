@@ -3,111 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Itemeaser 😌</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
+  	<meta name="description" content="Struggling to decide? Overwhelmed by the possible outcomes? Don't worry. Itemeaser is here to help you with your decision paralysis - one tiny decision at a time." />
+    <meta name="google-site-verification" content="QfkG1V4MuMCmgi2jBSE1LVUJ6cwA7n6Q0g0wtKWDeB8" />
+    <title>Itemeaser 😌 - Fight decision paralysis - one tiny decision at a time.</title>
+	
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Itemeaser 😌 - Fight Decision Paralysis - One Tiny Decision at a Time">
+    <meta property="og:description" content="Struggling to decide? Overwhelmed by the possible outcomes? Don't worry. Itemeaser is here to help you with your decision paralysis - one tiny decision at a time.">
+    <meta property="og:image" content="https://itemeaser.com/icon512.png">
+    <meta property="og:url" content="https://itemeaser.com">
+    <meta property="og:type" content="website">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Itemeaser 😌 - Fight Decision Paralysis - One Tiny Decision at a Time">
+    <meta name="twitter:description" content="Struggling to decide? Overwhelmed by the possible outcomes? Don't worry. Itemeaser is here to help you with your decision paralysis - one tiny decision at a time.">
+    <meta name="twitter:image" content="https://itemeaser.com/icon512.png">
+
+    <link href="materialize/css/materialize.min.css" rel="stylesheet">
     <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" sizes="512x512" href="/icon512.png">
+    <link rel="icon" type="image/png" sizes="512x512"  href="/icon512.png">
     <link rel="icon" type="image/png" href="favicon.png">
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #121212;
-            color: #ffffff;
-            font-family: 'Poppins', sans-serif;
-        }
-        h1, h2, h3, h4, h5, h6 {
-            font-weight: 300;
-        }
-        #step-1, #step-2, #step-3 {
-            margin:
-        }
-        .container {
-            max-width: 600px;
-            width: 100%;
-        }
-        #tagline {
-            margin: 3em;
-        }
-        .hidden {
-            display: none;
-        }
-        .centered {
-            text-align: center;
-        }
-        .input-field input[type=text] {
-            color: #ffffff;
-            font-family: inherit;
-        }
-        .input-field input[type=text]:focus + label {
-            color: #ffffff;
-        }
-        .input-field .prefix.active {
-            color: #ffffff;
-        }
-        .input-field input[type=text]:focus {
-            border-bottom: 1px solid #ffffff;
-            box-shadow: 0 1px 0 0 #ffffff;
-        }
-        .collection {
-            border-radius: 8px;
-        }
-        .collection .collection-item {
-            color: #ffffff;
-            background-color: transparent;
-            position: relative;
-        }
-        .collection-item .btn-flat {
-            color: #ffffff;
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 24px;
-            position: absolute;
-            right: 0;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-        .btn, .btn:hover, .btn:focus {
-            background-color: #ff5722;
-            font-family: inherit;
-            border-radius: 8px;
-        }
-        .card {
-            background-color: #333333;
-            border-radius: 8px;
-        }
-        h2.card-title {
-            margin-top: 8px;
-        }
-        .bar {
-            height: 10px;
-            width: 0;
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            z-index: 0;
-        }
-        .list-item-wrapper {
-            position: relative;
-            padding: 10px;
-        }
-        .action-buttons {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .completed-task {
-            text-decoration: line-through;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
-        <h1 class="centered">Itemeaser <img style="height: 1em; position: relative; bottom: -0.16em" src="icon512.png"/></h1>
-        <p class="centered" id="tagline">Struggling to decide between different options? Overwhelmed by all of the possible outcomes? Don't worry. Itemeaser helps you. Just enter all of your options and Itemeaser will guide you through the process of ordering them.</p>
+        <a style="color:#ffffff" href="index.html"><h1 class="centered">Itemeaser <img style="height: 1em; position: relative; bottom: -0.16em" src="icon512.png"/></h1></a>
+        <p class="centered" id="tagline">Struggling to decide? Overwhelmed by the possible outcomes? Don't worry. Itemeaser is here to help you with your decision paralysis! Just list your options and Itemeaser will guide you through the process of ordering them - one tiny decision at a time.</p>
         <div id="step-1">
             <div class="input-field">
                 <input type="text" id="task-input" placeholder="Enter an item to prioritize." onkeypress="handleKeyPress(event)">
@@ -120,6 +43,43 @@
                 
                 <button class="btn waves-effect waves-light" onclick="addTask()">Add Item</button>
                 <button class="btn waves-effect waves-light red lighten-2" onclick="confirmTasks()">Compare Items</button>
+            </div>
+            <div class="row">
+                <div class="col s12">
+                    <ul class="collapsible">
+                    <li>
+                      <h3 class="collapsible-header">What is Decision Paralysis?</h3>
+                      <div class="collapsible-body"><span>Decision paralysis, also known as analysis paralysis, choice overload or decision fatigue, is a state of overthinking and indecision that occurs when faced with numerous choices. The overwhelming nature of the options can lead to difficulty making a decision or complete avoidance of making any choice at all. This can be particularly frustrating when the decisions are seemingly minor but still cause significant stress and delay.</span></div>
+                    </li>
+                    <li>
+                      <h3 class="collapsible-header">Conditions Associated with Decision Paralysis</h3>
+                      <div class="collapsible-body">
+                        <span>
+                          Decision paralysis can be a symptom of various psychological and cognitive conditions. Some of these include:
+                          <ul>
+                            <li><b>Anxiety Disorders:</b> Individuals with anxiety may struggle with decision paralysis due to excessive worry about making the wrong choice or fear of negative consequences.</li>
+                            <li><b>Obsessive-Compulsive Disorder (OCD):</b> People with OCD may experience decision paralysis as a result of their compulsions and need for certainty and perfection.</li>
+                            <li><b>Attention Deficit Hyperactivity Disorder (ADHD):</b> Those with ADHD may find it challenging to prioritize tasks or decisions due to difficulties in focusing and organizing.</li>
+                            <li><b>Depression:</b> Depression can cause a lack of motivation and energy, making decision-making feel like an insurmountable task.</li>
+                            <li><b>Perfectionism:</b> The desire to make the "perfect" choice can lead to extensive deliberation and hesitation, resulting in decision paralysis.</li>
+                          </ul>
+                        </span>
+                      </div>
+                    </li>
+                    <li>
+                      <h3 class="collapsible-header">How Itemeaser Helps</h3>
+                      <div class="collapsible-body"><span>Itemeaser aims to alleviate decision paralysis by simplifying the decision-making process. By breaking down a complex list of options into smaller, manageable comparisons, Itemeaser reduces the cognitive load and stress associated with making choices. Instead of trying to order an entire list at once, users can make decisions one pair at a time, making the process feel less daunting and more manageable.<br><br>Remember, it's much easier to decide between two options than to order the whole list in one go! We hope Itemeaser helps you navigate through your decision paralysis with ease and confidence.</span></div>
+                    </li>
+                    <li>
+                      <h3 class="collapsible-header">How to use Itemeaser to Fight Decision Paralysis</h3>
+                      <div class="collapsible-body">
+                        <p> Enter each item on your list by writing it down and pressing "Add Item" or the "Enter"-Key. Then, click "Compare Items". Itemeaser will randomly pick a pair of two items for you to decide between. Pick one - depending on what matters to you right now, or by gut feeling - and continue until you've compared all pairs. Itemeaser then shows you the final, ordered list of items based on your comparisons.</p>
+                        <p> You can even help someone else with their decision paralysis by creating a list for them and sharing it with them using the share function - either before clicking "Compare Items" for them to do the comparison by themselves, or after comparing the tasks for them. </p>
+                        <p> Prioritizing tasks? You can add the tasks to your calendar once you have prioritized them. The "Add to Calendar" button will create a one-hour block for each item and set up an .ics file which you can import into your preferred calendar app! </p>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
             </div>
         </div>
         <div id="step-2" class="hidden">
@@ -155,12 +115,21 @@
                 <button class="btn waves-effect waves-light red lighten-2" onclick="confirmTasks()">Compare Items</button>
             </div>
         </div>
+        <footer>
+            <a href="imprint.html">Imprint/Impressum</a>            
+            <a href="privacy-policy.html">Privacy Policy</a>
+        </footer>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.4.4/lz-string.min.js"></script>
+    <script src="materialize/js/materialize.min.js"></script>
+    <script src="lz-string//lz-string.min.js"></script>
 
     <script>
+		document.addEventListener('DOMContentLoaded', function() {
+          var elems = document.querySelectorAll('.collapsible');
+          var instances = M.Collapsible.init(elems);
+        });
+      
         let tasks = [];
         let comparisons = [];
         let comparisonIndex = 0;
