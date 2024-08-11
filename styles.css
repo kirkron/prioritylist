@@ -25,11 +25,12 @@
 body {
     display: flex;
     justify-content: center;
-    height: 100vh;
+    min-height: 100vh;
     margin: 0;
     background-color: #121212;
     color: #ffffff;
     font-family: 'Poppins', sans-serif;
+  	padding: 10px;
 }
 h1, h2, h3, h4, h5, h6 {
     font-weight: 300;
@@ -40,6 +41,10 @@ h1, h2, h3, h4, h5, h6 {
 .container {
     max-width: 600px;
     width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 #tagline {
     margin: 3em;
@@ -87,10 +92,19 @@ h1, h2, h3, h4, h5, h6 {
     background-color: #ff5722;
     font-family: inherit;
     border-radius: 8px;
+    margin: 5px;
+}
+.btn:first-child {
+    margin-left: 0px;
+}
+.btn:last-child {
+    margin-right: 0px;
 }
 .card {
     background-color: #333333;
     border-radius: 8px;
+    margin: 10px -10px;
+    border: 1px solid white;
 }
 h2.card-title {
     margin-top: 8px;
@@ -116,11 +130,37 @@ h2.card-title {
     text-decoration: line-through;
 }
 
+.collapsible {
+	border: 1px solid white;
+  	background-color: #222222;
+    border-radius: 8px;
+  	margin: 30px -10px;
+  	margin-top: 20px;
+}
+
+.collapsible-header {
+	background: transparent;
+  	margin-top: 10px;
+  	margin-bottom: 0px;
+  	font-size: 2em;
+  	border-bottom: 0;
+  	border-top: 0;
+	text-decoration: underline;
+  	text-underline-offset: 5px;
+    text-decoration-thickness: 2px;
+}
+
+.collapsible-body {
+  	padding: 1rem;
+}
+
 footer {
     border-top: 1px solid #ffffff;
     margin-top: 50px;
     padding-top: 10px;
     padding-bottom: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
     display: flex;
     justify-content: space-between;
 }
