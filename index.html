@@ -32,18 +32,20 @@
         <a style="color:#ffffff" href="index.html"><div class="logo centered">Itemeaser <img style="height: 1em; position: relative; bottom: -0.16em" src="icon512.png"/></div></a>
         <h1 class="centered" id="tagline">Fight Decision Paralysis - One Tiny Decision at a Time</h1>
         <div id="step-1">
-            <h2>Enter your items to start prioritzing.</h2>
-            <div class="input-field">
-                <input type="text" id="task-input" onkeypress="handleKeyPress(event)">
-                <label for="task-input">Item</label>
-            </div>
-            <ul class="collection" id="task-list"></ul>
-            <div class="action-buttons">
-                <button class="btn waves-effect waves-light grey darken-3" onclick="resetTasks()">Reset</button>
-                <button class="btn waves-effect waves-light blue lighten-2" onclick="shareTasks()">Share List</button>
-                
-                <button class="btn waves-effect waves-light" onclick="addTask()">Add Item</button>
-                <button class="btn waves-effect waves-light red lighten-2" onclick="confirmTasks()">Compare Items</button>
+            <div class="step-1-main">
+                <h2>Enter your items to start prioritzing.</h2>
+                <div class="input-field">
+                    <input type="text" id="task-input" onkeypress="handleKeyPress(event)">
+                    <label for="task-input">Item</label>
+                </div>
+                <ul class="collection" id="task-list"></ul>
+                <div class="action-buttons">
+                    <button class="btn waves-effect waves-light grey darken-3" onclick="resetTasks()">Reset</button>
+                    <button class="btn waves-effect waves-light blue lighten-2" onclick="shareTasks()">Share List</button>
+                    
+                    <button class="btn waves-effect waves-light" onclick="addTask()">Add Item</button>
+                    <button class="btn waves-effect waves-light red lighten-2" onclick="confirmTasks()">Compare Items</button>
+                </div>
             </div>
             <div class="faq row">
                 <div class="col s12">
@@ -119,8 +121,9 @@
             </div>
         </div>
         <footer>
-            <a href="imprint.html">Imprint/Impressum</a>            
-            <a href="privacy-policy.html">Privacy Policy</a>
+            <a class="tip" href="https://ko-fi.com/kirkron" title="Leave a tip.">Leave a tip</a>
+            <a href="imprint.html" title="Imprint/Impressum">Imprint/Impressum</a>            
+            <a href="privacy-policy.html" title="Privacy Policy">Privacy Policy</a>
         </footer>
     </div>
 
