@@ -34,6 +34,19 @@ body {
 }
 h1, h2, h3, h4, h5, h6 {
     font-weight: 300;
+    margin: 10px 0px;
+}
+h1 {
+    font-size: 2em;
+}
+h2 {
+    font-size: 1.5em;
+}
+h3 {
+    font-size: 1.25em;
+}
+h4 {
+    font-size: 1em;
 }
 #step-1, #step-2, #step-3 {
     margin: 10px;
@@ -47,7 +60,11 @@ h1, h2, h3, h4, h5, h6 {
     justify-content: space-between;
 }
 #tagline {
-    margin: 3em;
+    font-size: 2em;
+    padding: 10px;
+}
+.logo {
+    font-size: 3em;
 }
 .hidden {
     display: none;
@@ -69,8 +86,22 @@ h1, h2, h3, h4, h5, h6 {
     border-bottom: 1px solid #ffffff;
     box-shadow: 0 1px 0 0 #ffffff;
 }
+.faq {
+    margin-top: 50px;
+}
+.faq h2{
+  font-size: 2em;
+  padding: 0px 10px 10px 10px;
+  border-bottom: 1px solid white;
+  text-align: center;
+
+}
 .collection {
     border-radius: 8px;
+    margin: 10px 0px;
+}
+.collection:empty {
+    display: none;
 }
 .collection .collection-item {
     color: #ffffff;

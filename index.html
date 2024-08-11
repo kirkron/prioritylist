@@ -29,11 +29,12 @@
 </head>
 <body>
     <div class="container">
-        <a style="color:#ffffff" href="index.html"><h1 class="centered">Itemeaser <img style="height: 1em; position: relative; bottom: -0.16em" src="icon512.png"/></h1></a>
-        <p class="centered" id="tagline">Struggling to decide? Overwhelmed by the possible outcomes? Don't worry. Itemeaser is here to help you with your decision paralysis! Just list your options and Itemeaser will guide you through the process of ordering them - one tiny decision at a time.</p>
+        <a style="color:#ffffff" href="index.html"><div class="logo centered">Itemeaser <img style="height: 1em; position: relative; bottom: -0.16em" src="icon512.png"/></div></a>
+        <h1 class="centered" id="tagline">Fight Decision Paralysis - One Tiny Decision at a Time</h1>
         <div id="step-1">
+            <h2>Enter your items to start prioritzing.</h2>
             <div class="input-field">
-                <input type="text" id="task-input" placeholder="Enter an item to prioritize." onkeypress="handleKeyPress(event)">
+                <input type="text" id="task-input" onkeypress="handleKeyPress(event)">
                 <label for="task-input">Item</label>
             </div>
             <ul class="collection" id="task-list"></ul>
@@ -44,9 +45,10 @@
                 <button class="btn waves-effect waves-light" onclick="addTask()">Add Item</button>
                 <button class="btn waves-effect waves-light red lighten-2" onclick="confirmTasks()">Compare Items</button>
             </div>
-            <div class="row">
+            <div class="faq row">
                 <div class="col s12">
                     <ul class="collapsible">
+                    <h2>FAQ</h2>
                     <li>
                       <h3 class="collapsible-header">What is Decision Paralysis?</h3>
                       <div class="collapsible-body"><span>Decision paralysis, also known as analysis paralysis, choice overload or decision fatigue, is a state of overthinking and indecision that occurs when faced with numerous choices. The overwhelming nature of the options can lead to difficulty making a decision or complete avoidance of making any choice at all. This can be particularly frustrating when the decisions are seemingly minor but still cause significant stress and delay.</span></div>
@@ -91,11 +93,12 @@
             </div>
         </div>
         <div id="step-3" class="hidden">
+            <h2>Results</h2>
             <div class="row">
                 <div class="col s12">
                     <div class="card">
                         <div class="card-content">
-                            <h2 class="card-title">Ordered Items</h2>
+                            <div class="card-title">Ordered Items</div>
                             <ul class="collection" id="ordered-tasks"></ul>
                             <button class="btn waves-effect waves-light green lighten-2" onclick="addToCalendar()">Add to Calendar</button>
                         </div>
